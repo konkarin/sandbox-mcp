@@ -13,7 +13,7 @@ export async function POST(req: Request) {
   const mcpClient = await experimental_createMCPClient({
     transport: {
       type: "sse",
-      url: "https://mcp.atlassian.com/v1/sse",
+      url: "http://localhost:8080/sse",
     },
   });
 
