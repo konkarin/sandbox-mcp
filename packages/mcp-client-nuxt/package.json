@@ -1,0 +1,25 @@
+{
+  "name": "@sandbox-mcp/mcp-client-nuxt",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@ai-sdk/azure": "^1.2.19",
+    "@ai-sdk/vue": "^1.2.12",
+    "ai": "^4.3.16",
+    "nuxt": "^3.17.5",
+    "vue": "^3.5.17",
+    "vue-router": "^4.5.1",
+    "zod": "^3.25.67"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "7.0.0-beta.0",
+    "tailwindcss": "^4"
+  }
+}
