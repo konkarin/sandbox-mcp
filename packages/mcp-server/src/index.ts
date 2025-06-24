@@ -2,40 +2,27 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 
 import express from "express";
-import { z } from "zod";
+import { weatherToolConfig } from "./weather.js";
+import { diceToolConfig } from "./dice.js";
 
 const mcpServer = new McpServer({
   name: "example-server",
   version: "1.0.0",
 });
 
-// Tool with arguments:
 mcpServer.tool(
-  "check-product-stock",
-  "Check if a product is available",
-  {
-    productName: z.string(),
-  },
-  async ({ productName }) => {
-    return {
-      content: [
-        {
-          type: "text",
-          text: `The product ${productName} is available in stock`,
-        },
-      ],
-    };
-  }
+  diceToolConfig.name,
+  diceToolConfig.description,
+  diceToolConfig.inputSchema,
+  diceToolConfig.handler
 );
 
-// Tool with zero arguments:
-mcpServer.tool("list-products", "List all products", async () => {
-  return {
-    content: [
-      { type: "text", text: "Products: Product 1, Product 2, Product 3" },
-    ],
-  };
-});
+mcpServer.tool(
+  weatherToolConfig.name,
+  weatherToolConfig.description,
+  weatherToolConfig.inputSchema,
+  weatherToolConfig.handler
+);
 
 let transport: SSEServerTransport;
 
