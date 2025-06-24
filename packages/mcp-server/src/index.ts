@@ -1,9 +1,12 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
-
+import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import express from "express";
-import { weatherToolConfig } from "./weather.js";
-import { diceToolConfig } from "./dice.js";
+
+import { diceToolConfig } from "./dice";
+import { weatherToolConfig } from "./weather";
+
+const app = express();
+app.use(express.json());
 
 const mcpServer = new McpServer({
   name: "example-server",
@@ -24,19 +27,63 @@ mcpServer.tool(
   weatherToolConfig.handler
 );
 
-let transport: SSEServerTransport;
-
-const app = express();
-
-app.get("/sse", async (req, res) => {
-  transport = new SSEServerTransport("/messages", res);
-  await mcpServer.connect(transport);
+app.post("/mcp", async (req, res) => {
+  try {
+    const transport = new StreamableHTTPServerTransport({
+      sessionIdGenerator: undefined,
+    });
+    await mcpServer.connect(transport);
+    await transport.handleRequest(req, res, req.body);
+    res.on("close", () => {
+      transport.close();
+      mcpServer.close();
+    });
+  } catch (error) {
+    console.error("Error handling MCP request:", error);
+    if (!res.headersSent) {
+      res.status(500).json({
+        jsonrpc: "2.0",
+        error: {
+          code: -32603,
+          message: "Internal server error",
+        },
+        id: null,
+      });
+    }
+  }
 });
 
-app.post("/messages", async (req, res) => {
-  await transport.handlePostMessage(req, res);
+app.get("/mcp", async (_req, res) => {
+  console.log("Received GET MCP request");
+  res.writeHead(405).end(
+    JSON.stringify({
+      jsonrpc: "2.0",
+      error: {
+        code: -32000,
+        message: "Method not allowed.",
+      },
+      id: null,
+    })
+  );
 });
 
-app.listen(8080, () => {
-  console.log(`Example SSE MCP server listening on port ${8080}`);
+app.delete("/mcp", async (_req, res) => {
+  console.log("Received DELETE MCP request");
+  res.writeHead(405).end(
+    JSON.stringify({
+      jsonrpc: "2.0",
+      error: {
+        code: -32000,
+        message: "Method not allowed.",
+      },
+      id: null,
+    })
+  );
+});
+
+app.listen(8080);
+
+process.on("SIGINT", async () => {
+  console.log("Shutting down server...");
+  process.exit(0);
 });

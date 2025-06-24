@@ -12,6 +12,7 @@
   "dependencies": {
     "@ai-sdk/azure": "^1.2.19",
     "@ai-sdk/vue": "^1.2.12",
+    "@modelcontextprotocol/sdk": "^1.13.1",
     "ai": "^4.3.16",
     "nuxt": "^3.17.5",
     "vue": "^3.5.17",
