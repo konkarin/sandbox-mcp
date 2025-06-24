@@ -1,75 +1,103 @@
-# Nuxt Minimal Starter
+# MCP Client (Nuxt)
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Model Context Protocol (MCP) を使用した Nuxt.js ベースのチャットアプリケーションです。Azure OpenAI と MCP サーバーを統合し、リアルタイムでツールを実行できるチャットインターフェースを提供します。
 
-## Setup
+## 特徴
 
-Make sure to install dependencies:
+- **リアルタイムチャット**: Azure OpenAI (o3-mini) を使用したストリーミングチャット
+- **MCP 統合**: Server-Sent Events (SSE) を通じて MCP サーバーと通信
+- **ツール実行**: チャット内でリアルタイムツール実行の可視化
+- **レスポンシブデザイン**: Tailwind CSS を使用したモダンな UI
+- **TypeScript**: 完全な型安全性
+
+## 必要な環境変数
 
 ```bash
-# npm
+AZURE_OPENAI_API_KEY=your_azure_openai_api_key
+```
+
+## セットアップ
+
+依存関係をインストール:
+
+```bash
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
+## 開発サーバー
 
-Start the development server on `http://localhost:3000`:
+開発サーバーを `http://localhost:3000` で起動:
 
 ```bash
-# npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+**注意**: MCP サーバーが `http://localhost:8080/sse` で実行されている必要があります。
 
-Build the application for production:
+### MCP サーバーの起動
+
+MCP サーバーを起動するには、別のターミナルで以下を実行:
 
 ```bash
-# npm
+cd packages/mcp-server
+npm run dev
+```
+
+## 本番環境
+
+本番用にビルド:
+
+```bash
 npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
 ```
 
-Locally preview production build:
+本番ビルドをローカルでプレビュー:
 
 ```bash
-# npm
 npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## 技術スタック
+
+- **フレームワーク**: Nuxt.js 3
+- **UI**: Vue 3 + Tailwind CSS
+- **AI**: Azure OpenAI + Vercel AI SDK
+- **プロトコル**: Model Context Protocol (MCP)
+- **通信**: Server-Sent Events (SSE)
+
+## プロジェクト構造
+
+```
+mcp-client-nuxt/
+├── app.vue              # メインアプリケーション
+├── components/
+│   └── Chat.vue         # チャットコンポーネント
+├── server/
+│   └── api/
+│       └── chat.post.ts # チャット API エンドポイント
+├── assets/
+│   └── css/
+│       └── main.css     # グローバルスタイル
+└── nuxt.config.ts       # Nuxt 設定
+```
+
+## 使用方法
+
+1. **MCP サーバーを起動**:
+   ```bash
+   cd packages/mcp-server
+   npm run dev
+   ```
+
+2. **環境変数を設定** (`.env` ファイルを作成):
+   ```bash
+   AZURE_OPENAI_API_KEY=your_azure_openai_api_key
+   ```
+
+3. **開発サーバーを起動**:
+   ```bash
+   npm run dev
+   ```
+
+4. ブラウザで `http://localhost:3000` にアクセス
+5. メッセージを送信してツール実行を確認
