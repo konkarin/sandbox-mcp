@@ -3,12 +3,13 @@
 import { useChat } from "@ai-sdk/react";
 
 export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit, status } =
-    useChat();
+  const { messages, input, handleInputChange, handleSubmit, status } = useChat({
+    api: "/api/chat",
+  });
 
   return (
     <div className="flex flex-col w-full max-w-md py-24 mx-auto gap-4">
-      <h1 className="text-2xl font-bold">Chat with Gemini</h1>
+      <h1 className="text-2xl font-bold">Chat with Open AI</h1>
       {messages.map((message) => (
         <div key={message.id} className="whitespace-pre-wrap">
           {message.role === "user" ? "User: " : "AI: "}
