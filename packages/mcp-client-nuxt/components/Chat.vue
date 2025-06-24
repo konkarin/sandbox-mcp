@@ -10,7 +10,7 @@ const { messages, input, handleSubmit, status } = useChat({
   <div class="flex flex-col w-full max-w-md py-24 mx-auto gap-4">
     <h1 class="text-2xl font-bold">Chat with AI</h1>
 
-    <div class="flex flex-col gap-4 max-h-96">
+    <div class="flex flex-col gap-4">
       <div v-for="message in messages" :key="message.id" class="p-3 rounded-lg">
         <div
           :class="
