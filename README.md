@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MCP Server Sandbox
 
-## Getting Started
+Model Context Protocol (MCP) サーバーのサンドボックス環境です。
 
-First, run the development server:
+## 機能
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### 利用可能なツール
+
+- **getDiceRoll**: 指定された面数のサイコロを振る
+- **getWeather**: 指定された場所の現在の天気情報を取得
+
+## 構成
+
+```
+packages/
+├── mcp-server/           # MCPサーバー
+│   └── src/
+│       ├── index.ts      # MCPサーバーのメイン設定
+│       ├── dice.ts       # サイコロ機能
+│       └── weather.ts    # 天気情報機能
+├── mcp-client/           # Next.jsベースのMCPクライアント
+│   └── app/
+│       ├── api/chat/     # チャットAPI
+│       └── page.tsx      # メインページ
+└── mcp-client-react/     # ViteベースのReact MCPクライアント
+    └── src/
+        ├── App.tsx       # メインアプリ
+        └── Routes.tsx    # ルーティング
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## セットアップ
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+依存関係をインストール:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+```
 
-## Learn More
+## 実行
 
-To learn more about Next.js, take a look at the following resources:
+### MCPサーバー
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+開発サーバーを起動:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+cd packages/mcp-server
+npm run dev
+```
 
-## Deploy on Vercel
+サーバーは `http://localhost:8080` で起動します。
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### エンドポイント
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `GET /sse` - SSE接続の確立
+- `POST /messages` - メッセージの送信
+
+### MCPクライアント (Next.js)
+
+```bash
+cd packages/mcp-client
+npm run dev
+```
+
+クライアントは `http://localhost:3000` で起動します。
+
+### MCPクライアント (React + Vite)
+
+```bash
+cd packages/mcp-client-react
+npm run dev
+```
+
+クライアントは `http://localhost:5173` で起動します。
+
+## 使用技術
+
+### サーバー
+- TypeScript
+- Express.js
+- Model Context Protocol (MCP) SDK
+- Open-Meteo API (天気情報)
+- Zod (スキーマ検証)
+
+### クライアント
+- **Next.js版**: Next.js 15, React 19, AI SDK, Tailwind CSS
+- **React版**: Vite, React 19, React Router, use-mcp
+
+## API
+
+### getDiceRoll
+
+```typescript
+{
+  sides: number // サイコロの面数 (1以上)
+}
+```
+
+### getWeather
+
+```typescript
+{
+  location: string // 天気を取得する場所
+}
+```
