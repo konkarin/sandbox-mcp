@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
     resourceName: "kon-test",
   });
 
-  const url = new URL("http://localhost:8080/mcp");
+  const url = new URL("http://localhost:3000/mcp");
   const mcpClient = await experimental_createMCPClient({
     transport: new StreamableHTTPClientTransport(url),
   });
